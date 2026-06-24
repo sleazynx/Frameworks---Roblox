@@ -1,0 +1,3 @@
+local DataTable = {}
+
+return DataTable

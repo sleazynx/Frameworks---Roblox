@@ -1,0 +1,11 @@
+[package]
+name = "tobia/frameworks"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+FormatNumber = "kumarion/formatnumber@0.0.1"
+
+[server-dependencies]
+ProfileService = "firebird702/profileservice@1.1.0"
