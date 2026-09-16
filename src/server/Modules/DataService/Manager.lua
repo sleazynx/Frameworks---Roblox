@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ModuleLoader = require(ReplicatedStorage:WaitForChild("ModuleLoader"))
 
 local Remotes = ReplicatedStorage.Remotes
 
@@ -15,9 +16,51 @@ PlayerData = {
 	}
 } ]]--
 
+local Template
+
+function Manager:onLoad()
+    Template = ModuleLoader:Get("DataService.Template")
+end
+
+local function deepCopy(tbl)
+	local copy = {}
+
+	for key, value in pairs(tbl) do
+		if type(value) == "table" then
+			copy[key] = deepCopy(value)
+		else
+			copy[key] = value
+		end
+	end
+
+	return copy
+end
+
+local function resetTable(current, defaults, ignored)
+	for key, defaultValue in pairs(defaults) do
+
+		-- Skip ignored values
+		if ignored[key] then
+			continue
+		end
+
+		if type(defaultValue) == "table" then
+
+			if type(current[key]) ~= "table" then
+				current[key] = {}
+			end
+
+			resetTable(current[key], defaultValue, ignored)
+
+		else
+			current[key] = defaultValue
+		end
+	end
+end
+
 local function resolvePath(player: Player, path: string)
 	local profile = Manager.Profiles[player]
-	if not profile then return end
+	if not profile then print("Failed to find profile for player", player) return end
 
 	local keys = string.split(path, "/")
 	local current = profile.Data
@@ -62,6 +105,19 @@ function Manager.SetValue(player: Player, path: string, value: any)
 	if targetTable then
 		targetTable[key] = value
 	end
+end
+
+function Manager.ResetPlayer(player, ignoredStats)
+
+	local profile = Manager.Profiles[player]
+	if not profile then
+		return
+	end
+
+	ignoredStats = ignoredStats or {}
+
+	resetTable(profile.Data, Template, ignoredStats)
+
 end
 
 -- Accessor

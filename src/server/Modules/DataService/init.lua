@@ -23,10 +23,10 @@ function DataService.onLoad()
         leaderstats.Name = "leaderstats"
         leaderstats.Parent = player
 
-        local Cash = Instance.new("NumberValue")
-        Cash.Name = "Cash"
-        Cash.Value = profile.Data.PlayerStats.Cash
-        Cash.Parent = leaderstats
+        local GoldCoins = Instance.new("NumberValue")
+        GoldCoins.Name = "GoldCoins"
+        GoldCoins.Value = profile.Data.Coins
+        GoldCoins.Parent = leaderstats
     end
 
     local function PlayerAdded(player: Player)

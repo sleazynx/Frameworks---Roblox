@@ -48,8 +48,9 @@ local function loadFolder(folder, rootFolder)
                 modules[fullPath] = module
 
                 -- Create short path relative to root folder
-                local relativePath = descendant:GetFullName():sub(#rootFolder:GetFullName() + 2) -- +2 skips the dot
+                local relativePath = descendant:GetFullName():sub(#rootFolder:GetFullName() + 2):gsub("/", ".") -- +2 skips the dot
                 shortPaths[relativePath] = module
+                print(relativePath)
 
                 -- Determine priority
                 local priority = type(module.Priority) == "number" and module.Priority or 0
